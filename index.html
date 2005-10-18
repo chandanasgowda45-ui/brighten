@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brighten – AI Wellness Companion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- LOTTIE AVATAR -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+<!-- FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+<style>
+/* BASIC RESET */
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
+
+body{
+  background:linear-gradient(135deg,#eef2ff,#faf5ff);
+  color:#0f172a;
+  overflow-x:hidden;
+}
+
+/* HEADER */
+header{
+  position:fixed;
+  top:0;
+  width:100%;
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(12px);
+  padding:1rem 2rem;
+  font-size:1.8rem;
+  font-weight:700;
+  color:#4f46e5;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  z-index:1000;
+}
+
+/* MAIN CONTAINER */
+.container{
+  padding-top:6rem;
+  padding-bottom:5rem;
+  max-width:900px;
+  margin:auto;
+}
+
+/* CARDS */
+.card{
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(12px);
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.4);
+  padding:2rem;
+  margin:2rem 0;
+  box-shadow:0 10px 50px rgba(0,0,0,0.07);
+}
+
+/* TITLES */
+h1{text-align:center;font-size:2.3rem;font-weight:700;color:#4f46e5;}
+h2{font-size:1.7rem;font-weight:600;color:#4338ca;margin-bottom:1rem;}
+
+/* BUTTON */
+.btn{
+  padding:0.8rem 1.6rem;
+  background:linear-gradient(135deg,#4f46e5,#22c55e);
+  border:none;
+  border-radius:30px;
+  color:white;
+  font-weight:600;
+  font-size:1rem;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(99,102,241,0.3);
+  transition:0.2s;
+}
+.btn:hover{transform:translateY(-4px);}
+
+/* MOOD */
+.mood-options span{
+  font-size:2.4rem;
+  margin:0.6rem;
+  cursor:pointer;
+}
+.mood-selected{transform:scale(1.4);}
+
+/* QUOTES */
+.quote-box{
+  background:white;
+  padding:1rem;
+  border-radius:14px;
+  text-align:center;
+  font-size:1.2rem;
+  cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* BREATHING */
+.breathing-circle{
+  width:120px;height:120px;margin:auto;
+  border-radius:50%;
+  background:rgba(79,70,229,0.3);
+  animation:breathe 6s infinite;
+}
+@keyframes breathe{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.5);}
+  100%{transform:scale(1);}
+}
+
+/* JOURNAL */
+.journal-input{
+  width:100%;height:120px;
+  padding:1rem;border-radius:12px;
+  border:1px solid #cbd5e1;resize:none;
+}
+.journal-entry{
+  background:white;padding:1rem;
+  border-radius:12px;margin-top:1rem;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  position:relative;
+}
+.delete-btn{
+  position:absolute;top:10px;right:10px;
+  background:#ef4444;color:white;border:none;
+  padding:5px 10px;border-radius:8px;
+  cursor:pointer;font-size:0.8rem;
+}
+
+/* CHAT SYSTEM */
+.chat-box{
+  background:rgba(255,255,255,0.6);
+  border-radius:20px;padding:1rem;
+  max-height:420px;overflow-y:auto;
+  box-shadow:0 6px 25px rgba(0,0,0,0.08);
+}
+.message{margin:1rem 0;display:flex;}
+.message .bubble{
+  padding:0.8rem 1rem;border-radius:15px;
+  max-width:70%;line-height:1.5;
+}
+.user-msg{justify-content:flex-end;}
+.user-msg .bubble{
+  background:#4f46e5;color:white;
+  border-bottom-right-radius:3px;
+}
+.bot-msg .bubble{
+  background:white;color:#374151;
+  border-bottom-left-radius:3px;
+}
+#chat-input{
+  width:100%;padding:0.8rem;
+  border-radius:12px;border:1px solid #cbd5e1;
+  margin-top:1rem;font-size:1rem;
+}
+.typing-indicator{
+  display:none;margin-left:60px;
+  color:#6b7280;font-style:italic;
+}
+</style>
+</head>
+
+<body>
+
+<header>🌈 BRIGHTEN – Wellness Companion</header>
+
+<div class="container">
+
+<!-- HERO -->
+<div class="card">
+  <h1>Welcome to Brighten</h1>
+  <p style="text-align:center;color:#6b7280;margin-top:10px;">
+    A safe space to breathe, reflect, and talk.
+  </p>
+</div>
+
+<!-- MOOD TRACKER -->
+<div class="card">
+  <h2>💛 How are you feeling?</h2>
+  <div class="mood-options">
+    <span onclick="setMood(this)">😊</span>
+    <span onclick="setMood(this)">😔</span>
+    <span onclick="setMood(this)">😡</span>
+    <span onclick="setMood(this)">😴</span>
+    <span onclick="setMood(this)">🤯</span>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="card">
+  <h2>💬 Daily Quote</h2>
+  <div class="quote-box" id="quoteBox">Tap for a comforting message ✨</div>
+</div>
+
+<!-- BREATHING -->
+<div class="card" style="text-align:center;">
+  <h2>🟣 Breathing Exercise</h2>
+  <div class="breathing-circle"></div>
+</div>
+
+<!-- JOURNAL -->
+<div class="card">
+  <h2>📓 Your Journal</h2>
+  <textarea id="journalText" class="journal-input" placeholder="Write what's on your mind..."></textarea>
+  <button class="btn" style="margin-top:0.8rem;" onclick="addJournal()">Save Entry</button>
+  <div id="journalList"></div>
+</div>
+
+<!-- CHAT -->
+<div class="card">
+  <h2>🧠 Talk with Brighten</h2>
+
+  <p>Select mode:</p>
+  <label><input type="radio" name="mode" value="coach" checked> 💪 Motivational Coach</label><br>
+  <label><input type="radio" name="mode" value="therapist"> 🌿 Therapist</label>
+
+  <div class="chat-box" id="chat-log">
+    <div class="message bot-msg">
+      <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_totrpclr.json"
+        background="transparent" speed="1"
+        style="width:55px;height:55px;margin-right:10px;" loop autoplay></lottie-player>
+      <div class="bubble">Hi, I’m Brighten. What’s on your mind today?</div>
+    </div>
+    <div class="typing-indicator" id="typing">Brighten is typing…</div>
+  </div>
+
+  <textarea id="chat-input" placeholder="Share your thoughts..."
+    onkeydown="if(event.key==='Enter'){event.preventDefault();sendChat();}"></textarea>
+  <button class="btn" onclick="sendChat()" style="margin-top:0.6rem;">Send</button>
+</div>
+
+</div>
+
+<script>
+/* QUOTES */
+document.getElementById("quoteBox").onclick = () => {
+  const quotes = [
+    "You are stronger than you know.",
+    "Your feelings matter.",
+    "One gentle step at a time.",
+    "You deserve peace.",
+    "It’s okay to ask for help."
+  ];
+  document.getElementById("quoteBox").innerHTML =
+    "💬 " + quotes[Math.floor(Math.random()*quotes.length)];
+};
+
+/* JOURNAL */
+function loadJournal(){
+  let entries = JSON.parse(localStorage.getItem("journal") || "[]");
+  document.getElementById("journalList").innerHTML = "";
+  entries.forEach((t,i)=>{
+    document.getElementById("journalList").innerHTML += `
+      <div class="journal-entry">
+        <button class="delete-btn" onclick="deleteJournal(${i})">Delete</button>
+        ${t}
+      </div>
+    `;
+  });
+}
+function addJournal(){
+  let text = document.getElementById("journalText").value.trim();
+  if(!text) return alert("Please write something first.");
+  let entries = JSON.parse(localStorage.getItem("journal") || "[]");
+  entries.unshift(text);
+  localStorage.setItem("journal", JSON.stringify(entries));
+  document.getElementById("journalText").value = "";
+  loadJournal();
+}
+function deleteJournal(i){
+  let entries = JSON.parse(localStorage.getItem("journal") || "[]");
+  entries.splice(i,1);
+  localStorage.setItem("journal", JSON.stringify(entries));
+  loadJournal();
+}
+loadJournal();
+
+/* MOOD */
+function setMood(el){
+  document.querySelectorAll(".mood-options span")
+    .forEach(s=>s.classList.remove("mood-selected"));
+  el.classList.add("mood-selected");
+}
+
+/* ---------------------------
+   ADVANCED FAKE AI ENGINE
+--------------------------- */
+
+/* Emotion detection */
+function detectEmotion(text){
+  text = text.toLowerCase();
+
+  const emotions = {
+    sadness: ["sad","down","hurt","cry","heartbroken","empty"],
+    anger: ["angry","mad","furious","irritated","annoyed"],
+    stress: ["stress","overwhelmed","pressure","too much"],
+    anxiety: ["anxious","worried","panic","scared","fear"],
+    loneliness: ["alone","lonely","ignored"],
+    tired: ["tired","exhausted","drained","sleepy"],
+  };
+
+  for(let e in emotions){
+    for(let w of emotions[e]){
+      if(text.includes(w)) return e;
+    }
+  }
+  return "neutral";
+}
+
+/* Emotion-based natural replies */
+const emotionReplies = {
+  sadness: [
+    "It makes sense that you're feeling this way. What part of the sadness feels heaviest?",
+    "I'm really sorry you're going through this. What do you wish someone understood right now?",
+    "Your pain is valid. You don’t have to hold it alone."
+  ],
+  anger: [
+    "It sounds like something crossed a boundary for you. What triggered the anger?",
+    "Anger often protects deeper hurt. What do you feel underneath it?",
+    "Your feelings are real—I'm here to help you through them."
+  ],
+  stress: [
+    "You're carrying so much. What’s one small thing you can release right now?",
+    "It’s okay to pause. What pressure feels the strongest today?",
+    "You're overwhelmed because you care—let’s take one gentle step."
+  ],
+  anxiety: [
+    "I hear your worry. What thoughts are racing the fastest?",
+    "Let’s slow down. What’s one thing you can feel or see around you?",
+    "You're safe in this moment. Tell me what triggered the anxiety."
+  ],
+  loneliness: [
+    "Feeling alone can hurt deeply. What made you feel isolated?",
+    "You deserve connection. What kind of support do you need most right now?",
+    "You're not truly alone—I'm here with you."
+  ],
+  tired: [
+    "You sound exhausted. What drained you the most today?",
+    "It’s okay to rest. You don’t have to push through everything.",
+    "Your body is asking for gentleness. What would help you feel lighter?"
+  ],
+  neutral: [
+    "I’m listening. Tell me more about what’s going on.",
+    "That sounds important. What else is on your mind?",
+    "I'm here for you—go on."
+  ]
+};
+
+/* Therapist and coach expansions */
+const coachAddons = [
+  "You're doing better than you think.",
+  "You've survived every hard moment so far.",
+  "Small steps still count as progress."
+];
+const therapistAddons = [
+  "What feeling is strongest right now?",
+  "When did this start feeling difficult?",
+  "If you could name the emotion, what would it be?"
+];
+
+/* Avatar mapping */
+const avatarMap = {
+  sadness: "https://assets1.lottiefiles.com/packages/lf20_sadface.json",
+  anger: "https://assets9.lottiefiles.com/packages/lf20_5ngs2ksb.json",
+  stress: "https://assets8.lottiefiles.com/packages/lf20_q7uarxsb.json",
+  anxiety: "https://assets10.lottiefiles.com/packages/lf20_8wREpI.json",
+  loneliness: "https://assets5.lottiefiles.com/packages/lf20_lonely.json",
+  tired: "https://assets7.lottiefiles.com/packages/lf20_sleepy.json",
+  neutral: "https://assets3.lottiefiles.com/packages/lf20_totrpclr.json"
+};
+
+/* Add messages */
+function addMessage(text, sender, avatar="neutral"){
+  const chat = document.getElementById("chat-log");
+  const msg = document.createElement("div");
+  msg.className = "message " + (sender === "user" ? "user-msg" : "bot-msg");
+
+  if(sender === "bot"){
+    msg.innerHTML = `
+      <lottie-player src="${avatarMap[avatar]}" background="transparent"
+      speed="1" style="width:55px;height:55px;margin-right:10px;" loop autoplay></lottie-player>
+      <div class="bubble">${text}</div>
+    `;
+  } else {
+    msg.innerHTML = `<div class="bubble">${text}</div>`;
+  }
+
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+/* Send chat */
+function sendChat(){
+  const input = document.getElementById("chat-input");
+  const text = input.value.trim();
+  if(!text) return;
+  addMessage(text,"user");
+  input.value="";
+
+  const mode = document.querySelector("input[name='mode']:checked").value;
+
+  /* Detect emotion */
+  const emotion = detectEmotion(text);
+
+  /* Show typing */
+  const typing = document.getElementById("typing");
+  typing.style.display = "block";
+
+  setTimeout(()=>{
+    typing.style.display = "none";
+
+    /* Build a natural reply */
+    let reply = emotionReplies[emotion][Math.floor(Math.random()*3)];
+
+    if(mode === "coach"){
+      reply += " " + coachAddons[Math.floor(Math.random()*coachAddons.length)];
+    } else {
+      reply += " " + therapistAddons[Math.floor(Math.random()*therapistAddons.length)];
+    }
+
+    addMessage(reply,"bot",emotion);
+
+  }, 900 + Math.random()*600);
+}
+</script>
+
+</body>
+</html>
